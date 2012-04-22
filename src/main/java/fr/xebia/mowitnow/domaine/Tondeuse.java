@@ -99,7 +99,7 @@ public class Tondeuse {
 						}
 					}
 				}
-				System.out.println(toString());
+				System.out.println(informationTondeuse());
 				System.out.println("-------------");
 			} else {
 				// il faut changer d'orientation
@@ -170,11 +170,11 @@ public class Tondeuse {
 	}
 
 	/**
-	 * toString.
+	 * informationTondeuse.
 	 * 
-	 * @return toString
+	 * @return informationTondeuse
 	 */
-	public String toString() {
+	public String informationTondeuse() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Position x : " + position.getX());
 		sb.append("\n");
