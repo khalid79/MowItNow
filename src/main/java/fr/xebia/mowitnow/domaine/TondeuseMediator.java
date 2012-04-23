@@ -5,6 +5,10 @@ import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServlet;
+
+import fr.xebia.mowitnow.presentation.PushPositionServlet;
+
 /**
  * Le médiateur et l'orchestrateur de communication entre les tondeuse.
  * Initialise est démarre toutes les tondeuses.
@@ -18,6 +22,12 @@ public class TondeuseMediator implements IMediator {
 	 * la liste des tondeuses.
 	 */
 	private List<Tondeuse> listeTondeuse;
+	
+	/**
+	 * Push servlet
+	 */
+	private PushPositionServlet pushServlet;
+	
 
 	/**
 	 * Constructeur du médiateur.
@@ -80,11 +90,22 @@ public class TondeuseMediator implements IMediator {
 	public void send(Position position, Tondeuse tondeuse) {
 		// Avertir toute les tondeuse de la position de celle ci
 		for (Tondeuse tondeuseB : listeTondeuse) {
-			// don't tell ourselves
+			// ne pas me notifier moi même
 			if (tondeuseB != tondeuse) {
 				tondeuseB.receive(position);
+				// temporaire
+				pushServlet.pushPosition(position);
 			}
 		}
 	}
+
+	/**
+	 * @param pushServlet the pushServlet to set
+	 */
+	public void setPushServlet(PushPositionServlet pushServlet) {
+		this.pushServlet = pushServlet;
+	}
+	
+	
 
 }

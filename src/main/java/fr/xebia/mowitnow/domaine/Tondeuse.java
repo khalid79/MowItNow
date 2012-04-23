@@ -101,12 +101,14 @@ public class Tondeuse {
 				}
 				System.out.println(informationTondeuse());
 				System.out.println("-------------");
+				send(position);
 			} else {
 				// il faut changer d'orientation
 				orientation = calculeOrientation(instruction.getDegre());
 			}
 		}
-		send(position);
+		// Envoyer la dernier position
+		//send(position);
 	}
 
 	/**
