@@ -48,7 +48,11 @@ public class PushPositionServlet extends HttpServlet {
 		
 	}
 	
-	public void pushPosition(Position position){
+	/**
+	 * 
+	 * @param messageTondeuse
+	 */
+	public void pushPosition(MessageTondeuse messageTondeuse){
 		ChannelService channelService = ChannelServiceFactory.getChannelService();
 
 		// This channelKey needs to be the same as the one in the first section above.
@@ -58,7 +62,7 @@ public class PushPositionServlet extends HttpServlet {
 		
 		// transformation Gson
 		Gson gson = new Gson();
-		channelService.sendMessage(new ChannelMessage(channelKey, gson.toJson(position)));
+		channelService.sendMessage(new ChannelMessage(channelKey, gson.toJson(messageTondeuse)));
 	}
 	
 	

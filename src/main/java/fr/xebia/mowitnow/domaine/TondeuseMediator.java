@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 
+import fr.xebia.mowitnow.presentation.MessageTondeuse;
 import fr.xebia.mowitnow.presentation.PushPositionServlet;
 
 /**
@@ -24,7 +25,7 @@ public class TondeuseMediator implements IMediator {
 	private List<Tondeuse> listeTondeuse;
 	
 	/**
-	 * Push servlet
+	 * Push servlet.
 	 */
 	private PushPositionServlet pushServlet;
 	
@@ -58,7 +59,7 @@ public class TondeuseMediator implements IMediator {
 			Position position = new Position(parseInt(positionChar[0]),
 					parseInt(positionChar[1]));
 			Tondeuse tondeuse = new Tondeuse(width, height, position,
-					Orientation.valueOf(positionChar[2]), this);
+					Orientation.valueOf(positionChar[2]), this , String.valueOf(i) );
 			List<Direction> listInstruction = new ArrayList<Direction>();
 			for (char c : lines[(2 * i) + 2].toCharArray()) {
 				listInstruction.add(Direction.valueOf(Character.toString(c)));
@@ -90,11 +91,12 @@ public class TondeuseMediator implements IMediator {
 	public void send(Position position, Tondeuse tondeuse) {
 		// Avertir toute les tondeuse de la position de celle ci
 		for (Tondeuse tondeuseB : listeTondeuse) {
+			// temporaire
+			MessageTondeuse messageTondeuse = new MessageTondeuse(tondeuse.getIdTondeuse(), position);
+			pushServlet.pushPosition(messageTondeuse);
 			// ne pas me notifier moi même
 			if (tondeuseB != tondeuse) {
 				tondeuseB.receive(position);
-				// temporaire
-				pushServlet.pushPosition(position);
 			}
 		}
 	}

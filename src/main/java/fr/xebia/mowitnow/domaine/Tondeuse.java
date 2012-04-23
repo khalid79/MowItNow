@@ -12,6 +12,11 @@ public class Tondeuse {
 
 	// ////////////////// Attributs de base de la tondeuse
 	// ///////////////////////////
+	
+	/**
+	 * id de la tondeuse.
+	 */
+	public String idTondeuse;
 
 	/**
 	 * la limite à ne pas dépassée sur l'axe : x.
@@ -63,15 +68,17 @@ public class Tondeuse {
 	 *            orientation
 	 * @param tondeuseMediator
 	 *            tondeuseMediator
+	 *             @param idTondeuse idTondeuse
 	 */
 	public Tondeuse(int limiteX, int limiteY, Position position,
-			Orientation orientation, IMediator tondeuseMediator) {
+			Orientation orientation, IMediator tondeuseMediator, String idTondeuse) {
 		this.limiteX = limiteX;
 		this.limiteY = limiteY;
 		this.position = position;
 		this.orientation = orientation;
 		this.tondeuseMediator = tondeuseMediator;
 		this.listeObstacle = new ArrayList<Position>();
+		this.idTondeuse = idTondeuse;
 	}
 
 	/**
@@ -264,4 +271,12 @@ public class Tondeuse {
 		return listeObstacle;
 	}
 
+	/**
+	 * @return the idTondeuse
+	 */
+	public String getIdTondeuse() {
+		return idTondeuse;
+	}
+
+	
 }

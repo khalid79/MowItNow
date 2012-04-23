@@ -18,11 +18,11 @@
 	}
 	
 	function onMessage(msg) {
-	    console.log(msg.data);
-	}
-	
-	function onMessage(err) {
-	    console.log(err);
+		var messageTondeuse = jQuery.parseJSON(msg.data);
+	    console.log("messagePush : "+ messageTondeuse);
+	    var idGrille = "grile-"+messageTondeuse.position.x+"-"+messageTondeuse.position.y;
+	    $("#"+idGrille).css("background-image", "url(image/gazon-apres.jpg)");
+	    $("#"+idGrille).css("background-image", "url(image/tondeuse.jpg)").css("background-size","100%");
 	}
 	
 	function onClose() {
@@ -67,13 +67,14 @@
 		var pasY = 60;
 		var left = 0;
 		var top  = 0;
-		for (z=1;z<=position.y;z++) {
+		for (z=0;z<position.y;z++) {
 			top = z * pasX; 
-			for (i=1;i<=position.x;i++) {
+			for (i=0;i<position.x;i++) {
 				left = i * pasY;
-				var idGrille = "grile-"+z+"-"+i;
-				$("<div id='"+idGrille+"' style='left:"+left+";top:"+top+";border: solid 1px black;height:"+pasY+"px;width:"+pasX+"px;display:inline-block;position: absolute;'>")
-				.appendTo(".grilleContainer");
+				var idGrille = "grile-"+(position.y -1 - z)+"-"+ i;
+				var $grille = $("<div id='"+idGrille+"' style='left:"+left+";top:"+top+";border: solid 1px black;height:"+pasY+"px;width:"+pasX+"px;display:inline-block;position: absolute;'>");
+				$grille.css("background-image", "url(image/gazon.jpg)"); 
+				$grille.appendTo(".grilleContainer");
 			}
 		}
 	};

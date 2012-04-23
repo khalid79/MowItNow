@@ -31,7 +31,7 @@ public class TondeuseTest {
 	 */
 	@Test
 	public void simulationTest1(){
-		Tondeuse tondeuse = new Tondeuse(5,5,new Position(1, 2),Orientation.N, new TondeuseMediator());
+		Tondeuse tondeuse = new Tondeuse(5,5,new Position(1, 2),Orientation.N, new TondeuseMediator(), "test1");
 		List<Direction> list = new ArrayList<Direction>();
 		list.add(Direction.G);
 		list.add(Direction.A);
@@ -62,7 +62,7 @@ public class TondeuseTest {
 	 */
 	@Test
 	public void simulationTest2(){
-		Tondeuse tondeuse = new Tondeuse(5,5,new Position(3, 3),Orientation.E,new TondeuseMediator());
+		Tondeuse tondeuse = new Tondeuse(5,5,new Position(3, 3),Orientation.E,new TondeuseMediator(),"test2");
 		List<Direction> list = new ArrayList<Direction>();
 		list.add(Direction.A);
 		list.add(Direction.A);
