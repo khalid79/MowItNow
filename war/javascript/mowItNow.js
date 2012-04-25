@@ -48,11 +48,16 @@
 	function onMessage(msg) {
 		// parser le résultat envoyer en json
 		var messageTondeuse = jQuery.parseJSON(msg.data);
-	    console.log("messagePush : "+ messageTondeuse);
+	    console.log("messagePush : "+ messageTondeuse.degre);
 	    var idGrille = "grile-"+messageTondeuse.position.y+"-"+messageTondeuse.position.x;
 	    var $grille = $("#"+idGrille);
-    	$(".tondue").css("background-image", "url(image/gazon-apres.jpg)");
+    	///$(".tondue").css("background-image", "url(image/gazon-apres.jpg)");
+	    $(".tondue").css("background-image", "");
+	    $(".tondue").css("background-color", "green"); 
     	$grille.css("background-image", "url(image/tondeuse.jpg)").css("background-size","100%");
+    	messageTondeuse.degre = messageTondeuse.degre - 90;
+    	console.log(" ---> messagePush : "+ messageTondeuse.degre);
+    	$grille.css('-webkit-transform', 'rotate('+messageTondeuse.degre+'deg)');
     	$grille.attr("class","tondue");
 	}
 	
@@ -99,8 +104,8 @@
 	 * @param pelouse pelouse
 	 */
 	function construirePelouse(pelouse){
-		var pasX = 60;
-		var pasY = 60;
+		var pasX = 50;
+		var pasY = 50;
 		var left = 0;
 		var top  = 0;
 		for ( z = 0; z <= pelouse.hauteur; z++ ) {
@@ -108,9 +113,10 @@
 			for ( i=0 ; i <= pelouse.largeur; i++) {
 				left = i * pasY;
 				var idGrille = "grile-"+(pelouse.hauteur - z)+"-"+ i;
-				var $grille = $("<div id='"+idGrille+"' style='left:"+left+";top:"+top+";border: solid 1px black;height:"+pasY+"px;width:"+pasX+"px;display:inline-block;position: absolute;'>");
+				var $grille = $("<div id='"+idGrille+"' style='left:"+left+"px;top:"+top+"px;border: solid 1px black;height:"+pasY+"px;width:"+pasX+"px;display:inline-block;position: absolute;'>");
 				$grille.css("background-image", "url(image/gazon.jpg)"); 
-				$grille.appendTo(".grilleContainer");
+				//$grille.appendTo(".grilleContainer");
+				$(".grilleContainer").append($grille.show("slow"));
 			}
 		}
 	};

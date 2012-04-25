@@ -21,8 +21,8 @@ public class TondeuseTest {
 	 */
 	@Test
 	public void simulationTest0() throws Exception{
-		TondeuseMediator tondeuseMediator = new TondeuseMediator();
-		tondeuseMediator.construireInstructions("5 5\n" + "1 2 N\n" + "GAGAGAGAA\n" + "3 3 E\n" + "AADAADADDAGAAAGAAGADAA");
+//		TondeuseMediator tondeuseMediator = new TondeuseMediator();
+//		tondeuseMediator.construireInstructions("5 5\n" + "1 2 N\n" + "GAGAGAGAA\n" + "3 3 E\n" + "AADAADADDAGAAAGAAGADAA");
 	}
 	
 	

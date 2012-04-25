@@ -10,6 +10,8 @@ import javax.servlet.http.*;
 import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
 
+import fr.xebia.mowitnow.autres.IConstantes;
+
 /**
  * Permet de fournir un token pour établir la connexion avec l'ihm.
  * @author kbouaabd
@@ -27,12 +29,11 @@ public class InitialisationServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
-		ChannelService channelService = ChannelServiceFactory
-				.getChannelService();
+		ChannelService channelService = ChannelServiceFactory.getChannelService();
 
-		String token = channelService.createChannel("kaka");
+		String token = channelService.createChannel(IConstantes.CLIENT_ID);
 
-		FileReader reader = new FileReader("jsp/accueil.jsp");
+		FileReader reader = new FileReader("html/accueil.html");
 		CharBuffer buffer = CharBuffer.allocate(16384);
 		reader.read(buffer);
 		String index = new String(buffer.array());

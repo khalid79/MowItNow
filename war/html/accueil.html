@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+    <title>MowITNOW</title>
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">MowItNow</a>
+          <div class="nav-collapse pull-right">
+            <ul class="nav">
+              <li class="active "><a href="#">Token :  <span class="token">{{ token }}</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+	<div class="container">
+		<div class="alert alert-info">
+        	<strong>Bienvenue sur MowItNow !</strong> Veuillez saisir des commandes pour démmarer le jeu
+      	</div>
+		<div class="row">
+		<div class="span4">
+			<div class="control-group success">
+          		<textarea class="input-xlarge span4" id="zoneInstruction" rows="13"></textarea>
+          		<button name="envoyer" class="btn btn-success">Démarrer tondeuse(s)</button>
+          	</div>
+		</div>
+		<div class="span4">
+			<div class="grilleContainer" style="border: solid 1px red;position: relative;" ></div>
+			<!-- <div class="hero-unit">
+				
+	      	</div> -->
+	    </div>
+	    </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; MowItNow</p>
+      </footer>
+
+    </div> 
+
+    <script src="/_ah/channel/jsapi"></script>
+	<script src="javascript/jquery-1.7.1.js"	type="text/javascript"></script>
+	<script src="javascript/mowItNow.js"		type="text/javascript"></script>
+	<script src="javascript/bootstrap.min.js"		type="text/javascript"></script>
+
+  </body>
+</html>

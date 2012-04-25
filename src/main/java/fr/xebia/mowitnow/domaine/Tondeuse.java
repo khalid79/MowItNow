@@ -10,40 +10,39 @@ import java.util.List;
  */
 public class Tondeuse {
 
-	// ////////////////// Attributs de base de la tondeuse
-	// ///////////////////////////
-	
+	/***** Attributs de base de la tondeuse *****/
+
 	/**
 	 * id de la tondeuse.
 	 */
-	public String idTondeuse;
+	private String idTondeuse;
 
 	/**
 	 * la limite à ne pas dépassée sur l'axe : x.
 	 */
-	public int limiteX;
+	private int limiteX;
 
 	/**
 	 * la limite à ne pas dépassée sur l'axe : y.
 	 */
-	public int limiteY;
+	private int limiteY;
 
 	/**
 	 * la position courante de la tondeuse.
 	 */
-	public Position position;
+	private Position position;
 
 	/**
 	 * l'orientation de la tondeuse.
 	 */
-	public Orientation orientation;
+	private Orientation orientation;
 
 	/**
 	 * la liste des instruction qui doivent être interprété par la tondeuse.
 	 */
-	public List<Direction> listeInstructions;
+	private List<Direction> listeInstructions;
 
-	// ////////////////// Attributs en plus ///////////////////////////
+	/***** Attributs en plus *****/
 
 	/**
 	 * chaque tonseuse possède un méditeur pour communiquer avec les autres.
@@ -53,7 +52,7 @@ public class Tondeuse {
 	/**
 	 * les obstacles qui peuvent se trouvés dans l'espace de la tondeuse.
 	 */
-	public List<Position> listeObstacle;
+	private List<Position> listeObstacle;
 
 	/**
 	 * Constructeur de la tondeuse.
@@ -68,10 +67,12 @@ public class Tondeuse {
 	 *            orientation
 	 * @param tondeuseMediator
 	 *            tondeuseMediator
-	 *             @param idTondeuse idTondeuse
+	 * @param idTondeuse
+	 *            idTondeuse
 	 */
 	public Tondeuse(int limiteX, int limiteY, Position position,
-			Orientation orientation, IMediator tondeuseMediator, String idTondeuse) {
+			Orientation orientation, IMediator tondeuseMediator,
+			String idTondeuse) {
 		this.limiteX = limiteX;
 		this.limiteY = limiteY;
 		this.position = position;
@@ -89,7 +90,7 @@ public class Tondeuse {
 	 */
 	public void demarrer() throws Exception {
 		// send premier position
-		send(position);
+		tondeuseMediator.notifierPosition(this);
 		for (Direction instruction : listeInstructions) {
 			if (instruction == Direction.A) {
 				Position positiontemp = avancer();
@@ -110,14 +111,15 @@ public class Tondeuse {
 				}
 				System.out.println(informationTondeuse());
 				System.out.println("-------------");
-				send(position);
+				
 			} else {
 				// il faut changer d'orientation
 				orientation = calculeOrientation(instruction.getDegre());
 			}
+			tondeuseMediator.notifierPosition(this);
 		}
 		// Envoyer la dernier position
-		//send(position);
+		// send(position);
 	}
 
 	/**
@@ -130,13 +132,13 @@ public class Tondeuse {
 	 *             TODO: changer le type de l'exception
 	 */
 	private Orientation calculeOrientation(int degre) throws Exception {
-		int degreeCalcule = ( degre + orientation.getDegre() ) %360;
+		int degreeCalcule = (degre + orientation.getDegre()) % 360;
 		if (degreeCalcule < 0) {
 			degreeCalcule = 360 + degreeCalcule;
-		} 
-//		else if (degreeCalcule == 360) {
-//			degreeCalcule = 0;
-//		}
+		}
+		// else if (degreeCalcule == 360) {
+		// degreeCalcule = 0;
+		// }
 		for (Orientation orientation : Orientation.values()) {
 			if (degreeCalcule == orientation.getDegre()) {
 				return orientation;
@@ -180,6 +182,19 @@ public class Tondeuse {
 		}
 		return positionTemp;
 	}
+	
+	/**
+	 * Permet de récupérer les positions des autres tondeuses. Ajouter les
+	 * positions comme des obstacles
+	 * 
+	 * @param position
+	 *            position
+	 */
+	public void recevoirPosition(Position position) {
+		this.listeObstacle.add(position);
+		System.out.println("Position nouveau obstacle: " + position.toString()
+				+ " this " + this);
+	}
 
 	/**
 	 * informationTondeuse.
@@ -196,32 +211,6 @@ public class Tondeuse {
 		sb.append("\n");
 		sb.append("this : " + this);
 		return sb.toString();
-	}
-
-	/*************************************************************/
-	/********************** Mediator ******************************/
-
-	/**
-	 * Envoyer un message avec le mediator.
-	 * 
-	 * @param position
-	 *            position
-	 */
-	public void send(Position position) {
-		tondeuseMediator.send(position, this);
-	}
-
-	/**
-	 * Permet de récupérer les positions des autres tondeuses. Ajouter les
-	 * positions comme des obstacles
-	 * 
-	 * @param position
-	 *            position
-	 */
-	public void receive(Position position) {
-		this.listeObstacle.add(position);
-		System.out.println("Position nouveau obstacle: " + position.toString()
-				+ " this " + this);
 	}
 
 	/**
@@ -281,5 +270,4 @@ public class Tondeuse {
 		return idTondeuse;
 	}
 
-	
 }
