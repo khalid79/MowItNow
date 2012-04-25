@@ -1,14 +1,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <title>MowITNOW</title>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
     <!-- Le styles -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="style/bootstrap.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Sirin+Stencil" rel="stylesheet" type="text/css">
     <style type="text/css">
       body {
-        padding-top: 60px;
+        padding-top: 100px;
         padding-bottom: 40px;
+      }
+      .titre {
+      	font-family: 'Sirin Stencil', cursive;
+		font-weight: normal;
+		font-size: 2.5em;
+		color: hsl(42, 84%, 52%);
       }
     </style>
   </head>
@@ -16,34 +23,28 @@
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">MowItNow</a>
-          <div class="nav-collapse pull-right">
-            <ul class="nav">
-              <li class="active "><a href="#">Token :  <span class="token">{{ token }}</span></a></li>
-            </ul>
+          <a class="brand" href="#"><span class="titre">MowItNow</span></a>
+          <div class="nav-collapse pull-right" style="margin-top: 20px;">
+          	<p class="navbar-text pull-right"><a href="#">A propos</a></p>
           </div>
         </div>
       </div>
     </div>
 
 	<div class="container">
+		<input type="hidden" name="token" value="{{ token }}" >
 		<div class="alert alert-info">
-        	<strong>Bienvenue sur MowItNow !</strong> Veuillez saisir des commandes pour démmarer le jeu
+        	<strong>Bienvenue sur MowItNow !</strong> Veuillez saisir des commandes pour démarrer le jeu
       	</div>
 		<div class="row">
 		<div class="span4">
 			<div class="control-group success">
-          		<textarea class="input-xlarge span4" id="zoneInstruction" rows="13"></textarea>
+          		<textarea class="input-xlarge span4" id="zoneInstruction" rows="16"></textarea>
           		<button name="envoyer" class="btn btn-success">Démarrer tondeuse(s)</button>
           	</div>
 		</div>
 		<div class="span4">
-			<div class="grilleContainer" style="border: solid 1px red;position: relative;" ></div>
+			<div class="grilleContainer" style="position: relative;" ></div>
 			<!-- <div class="hero-unit">
 				
 	      	</div> -->

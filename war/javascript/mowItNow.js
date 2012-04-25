@@ -12,7 +12,7 @@
 	 */
 	function initChannel(){
 		// récupération du token
-		var token = $(".token").text();
+		var token = $("[name='token']").val();
 		channel = new goog.appengine.Channel(token);
 	    socket = channel.open();
 	    socket.onopen = onOpened;

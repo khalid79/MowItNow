@@ -39,7 +39,7 @@ public class InitialisationServlet extends HttpServlet {
 		String index = new String(buffer.array());
 		index = index.replaceAll("\\{\\{ token \\}\\}", token);
 
-		resp.setContentType("text/html");
+		resp.setContentType("text/html; charset=iso-8859-1");
 		resp.getWriter().write(index);
 	}
 	

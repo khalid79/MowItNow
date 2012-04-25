@@ -54,6 +54,13 @@ public class PushPositionServlet extends HttpServlet implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		pushPosition((MessageTondeuse) arg);
+		// TODO : temporaire
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
