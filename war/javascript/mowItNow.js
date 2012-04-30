@@ -1,7 +1,16 @@
-/** * fonctions js du projet mowitnow ** */
-
+/*********** fonctions js du projet mowitnow **********/
 	
-	function init(){
+	$(document).ready(function(){
+		// ouvrir le channel
+		initChannel();
+		// placer le listener sur l'envois des instructions
+		envoyerCommandes();
+	});
+	
+	/**
+	 * Création et ouverture du channel
+	 */
+	function initChannel(){
 		// récupération du token
 		var token = $(".token").text();
 		channel = new goog.appengine.Channel(token);
@@ -12,84 +21,99 @@
 	    socket.onclose = onClose;
 	}
 	
-	
+	/**
+	 * Fonction appelée à l'ouverture du channel
+	 */
 	function onOpened() {
 	    console.log("Channel opened!");
 	}
 	
+	/**
+	 * Fonction appelée à la fermeture du channel
+	 */
+	function onClose() {
+		console.log("Channel closed!");
+	}
+	
+	/**
+	 * Fonction appelée lors d'une erreur survenue sur la socket
+	 */
+	function onError() {
+		console.log("Channel error!");
+	}
+	
+	/**
+	 * Fonction appelée à la réception d'un message par la socket
+	 */
 	function onMessage(msg) {
+		// parser le résultat envoyer en json
 		var messageTondeuse = jQuery.parseJSON(msg.data);
 	    console.log("messagePush : "+ messageTondeuse);
-	    var idGrille = "grile-"+messageTondeuse.position.x+"-"+messageTondeuse.position.y;
-	    $("#"+idGrille).css("background-image", "url(image/gazon-apres.jpg)");
-	    $("#"+idGrille).css("background-image", "url(image/tondeuse.jpg)").css("background-size","100%");
+	    var idGrille = "grile-"+messageTondeuse.position.y+"-"+messageTondeuse.position.x;
+	    var $grille = $("#"+idGrille);
+    	$(".tondue").css("background-image", "url(image/gazon-apres.jpg)");
+    	$grille.css("background-image", "url(image/tondeuse.jpg)").css("background-size","100%");
+    	$grille.attr("class","tondue");
 	}
 	
-	function onClose() {
-	    console.log("Channel closed!");
+	/**
+	 * Permet d'envoyer les commandes vers le service
+	 */
+	function envoyerCommandes() {
+		$("[name='envoyer']").click(function(){
+			// supprimer le conteneur de grille
+			$('.grilleContainer').find('div').remove();
+			var entreeInstruction = $("#zoneInstruction").val();
+			var instructions = entreeInstruction.split(/\r\n|\r|\n/);
+			// la première ligne pour récupérer la largeur et la hauteur
+			var pelouse = new Pelouse(instructions[0].split(/\s/));
+			construirePelouse(pelouse);
+			envoyerInstructionsAjax(instructions);
+		});
 	}
 	
-	function onError() {
-	    console.log("Channel error!");
-	}
-			    
-			    
-	function clicker() {
-		console.log("okkkkkkkkkk");
-		envoyer($("#zoneInstruction").val());
-	}
-    
-	function envoyer(instructions) {
-		var request = $.ajax({
+	/**
+	 * Permet d'envoyer toutes les instructions vers le service
+	 * @param instructions
+	 */
+	function envoyerInstructionsAjax(instructions) {
+		$.ajax({
 			url: "/pushPosition",
-			type: "Post",
+			type: "POST",
 			data: {instructions : instructions},
-			dataType: "json",
-			success: function(data) {
-				console.log(data);
-			}
+			dataType: "json"
 		});
 	};
-    
-	$(document).ready(function(){
-		// ouvrir le channel
-		init();
-  
-	function Position(positionnement) {
-		this.x = positionnement[0];
-		this.y = positionnement[1];
-		this.log = function(){console.log("x: "+this.x +" y: "+this.y)};
+	
+	/**
+	 * Représente une pelouse, possède une largeur et une hauteur
+	 * @param descriptionPelouse tableau qui représente la largeur et la hauteur
+	 */
+	function Pelouse(descriptionPelouse) {
+		this.largeur = descriptionPelouse[0];
+		this.hauteur = descriptionPelouse[1];
 	};
-			  
-
-	function construireGrille(position){
+	
+	/**
+	 * Permet de construire la pelouse à partie de sa description
+	 * @param pelouse pelouse
+	 */
+	function construirePelouse(pelouse){
 		var pasX = 60;
 		var pasY = 60;
 		var left = 0;
 		var top  = 0;
-		for (z=0;z<position.y;z++) {
+		for ( z = 0; z <= pelouse.hauteur; z++ ) {
 			top = z * pasX; 
-			for (i=0;i<position.x;i++) {
+			for ( i=0 ; i <= pelouse.largeur; i++) {
 				left = i * pasY;
-				var idGrille = "grile-"+(position.y -1 - z)+"-"+ i;
+				var idGrille = "grile-"+(pelouse.hauteur - z)+"-"+ i;
 				var $grille = $("<div id='"+idGrille+"' style='left:"+left+";top:"+top+";border: solid 1px black;height:"+pasY+"px;width:"+pasX+"px;display:inline-block;position: absolute;'>");
 				$grille.css("background-image", "url(image/gazon.jpg)"); 
 				$grille.appendTo(".grilleContainer");
 			}
 		}
 	};
-			  
-	// récupérer les insctruction
-	$("[name='envoyer']").click(function(){
-		$('.grilleContainer').find('div').remove();
-		var entreeInstruction = $("#zoneInstruction").val();
-		var instructions = entreeInstruction.split(/\r\n|\r|\n/);
-		console.log(instructions);
-		// la première ligne pour récupérer la largeur et la hauteur
-		var position = new Position(instructions[0].split(/\s/));
-		position.log();
-		construireGrille(position);
-		envoyer(instructions);
-	});
-			  
-	});
+	
+    
+	

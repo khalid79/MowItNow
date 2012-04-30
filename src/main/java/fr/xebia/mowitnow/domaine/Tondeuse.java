@@ -88,6 +88,8 @@ public class Tondeuse {
 	 *             TODO: changer le type de l'exception
 	 */
 	public void demarrer() throws Exception {
+		// send premier position
+		send(position);
 		for (Direction instruction : listeInstructions) {
 			if (instruction == Direction.A) {
 				Position positiontemp = avancer();
@@ -128,12 +130,13 @@ public class Tondeuse {
 	 *             TODO: changer le type de l'exception
 	 */
 	private Orientation calculeOrientation(int degre) throws Exception {
-		int degreeCalcule = degre + orientation.getDegre();
+		int degreeCalcule = ( degre + orientation.getDegre() ) %360;
 		if (degreeCalcule < 0) {
 			degreeCalcule = 360 + degreeCalcule;
-		} else if (degreeCalcule == 360) {
-			degreeCalcule = 0;
-		}
+		} 
+//		else if (degreeCalcule == 360) {
+//			degreeCalcule = 0;
+//		}
 		for (Orientation orientation : Orientation.values()) {
 			if (degreeCalcule == orientation.getDegre()) {
 				return orientation;
