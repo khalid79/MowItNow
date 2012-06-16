@@ -2,6 +2,9 @@ package fr.xebia.mowitnow.domaine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
+import fr.xebia.mowitnow.autres.TondeuseException;
 
 /**
  * Représente une tondeuse. Avec toutes ces fonctionnalitées.
@@ -9,6 +12,11 @@ import java.util.List;
  * @author KBOUAABD
  */
 public class Tondeuse {
+	
+	/**
+	 * Logger.
+	 */
+	private static final Logger log = Logger.getLogger(Tondeuse.class.getName());
 
 	/***** Attributs de base de la tondeuse *****/
 
@@ -81,36 +89,32 @@ public class Tondeuse {
 		this.listeObstacle = new ArrayList<Position>();
 		this.idTondeuse = idTondeuse;
 	}
+	
+	
+
+	/**
+	 * Constructeur avec l'orientation.
+	 * @param orientation orientation
+	 */
+	public Tondeuse(Orientation orientation) {
+		super();
+		this.orientation = orientation;
+	}
+
+
 
 	/**
 	 * Permet de déplacer la tondeuse en parcourant les instructions.
-	 * 
-	 * @throws Exception
-	 *             TODO: changer le type de l'exception
+	 * @throws TondeuseException  TondeuseException
 	 */
-	public void demarrer() throws Exception {
-		// send premier position
+	public void demarrer() throws TondeuseException  {
+		// notifier la position initiale
 		tondeuseMediator.notifierPosition(this);
 		for (Direction instruction : listeInstructions) {
 			if (instruction == Direction.A) {
 				Position positiontemp = avancer();
-				// vérifier que la position temporaire n'est pas présente dans
-				// la liste des obtacle
-				if (listeObstacle.isEmpty()) {
-					position = positiontemp;
-				} else {
-					for (Position positionB : listeObstacle) {
-						if (positionB.getX() != positiontemp.getX()
-								|| positionB.getY() != positiontemp.getY()) {
-							position = positiontemp;
-							break;
-						} else {
-							System.out.println("Stoooop !!!!");
-						}
-					}
-				}
-				System.out.println(informationTondeuse());
-				System.out.println("-------------");
+				verifierObstacle(positiontemp);
+				log.info(informationTondeuse());
 				
 			} else {
 				// il faut changer d'orientation
@@ -118,9 +122,36 @@ public class Tondeuse {
 			}
 			tondeuseMediator.notifierPosition(this);
 		}
-		// Envoyer la dernier position
-		// send(position);
+		// notifier ma position entant qu'obstacle pour les autre tondeuses.
+		tondeuseMediator.notifierObstacle(this);
 	}
+
+	/**
+	 * Permet de vérifier si la position en parametre fais partie des obstacle.
+	 * @param positionTemporaire position calculée temporaire
+	 */
+	private void verifierObstacle(Position positionTemporaire) {
+		boolean obstacle = false;
+		// vérifier que la position temporaire n'est pas présente dans la liste des obtacle
+		if (listeObstacle.isEmpty()) {
+			position = positionTemporaire;
+		} else {
+			for (Position positionObstacle : listeObstacle) {
+				if (positionObstacle.getX() == positionTemporaire.getX() && positionObstacle.getY() == positionTemporaire.getY()) {
+					obstacle = true;
+					break;
+				} 
+			}
+			if(!obstacle){
+				position = positionTemporaire;
+			}else{
+				log.warning("Attention présence d'un obstacle sur la position : " + positionTemporaire.toString());
+			}
+		}
+	}
+	
+	
+	
 
 	/**
 	 * Permet de calculer l'onrientation en fonction des degre.
@@ -128,24 +159,22 @@ public class Tondeuse {
 	 * @param degre
 	 *            Exception
 	 * @return l'orientation qui corespondant au degre
-	 * @throws Exception
-	 *             TODO: changer le type de l'exception
+	 * @throws TondeuseException  TondeuseException
 	 */
-	private Orientation calculeOrientation(int degre) throws Exception {
+	protected Orientation calculeOrientation(int degre) throws TondeuseException  {
+		// si degreeCalcule égale à 360 le remettre à zéro
 		int degreeCalcule = (degre + orientation.getDegre()) % 360;
 		if (degreeCalcule < 0) {
 			degreeCalcule = 360 + degreeCalcule;
 		}
-		// else if (degreeCalcule == 360) {
-		// degreeCalcule = 0;
-		// }
 		for (Orientation orientation : Orientation.values()) {
 			if (degreeCalcule == orientation.getDegre()) {
 				return orientation;
 			}
 		}
-		throw new Exception("calcule orientation erreur :  ---> "
-				+ degreeCalcule);
+		// si l'orientation ne fait pas parties des Orientation.values(), alors throw une TondeuseException 
+		throw new TondeuseException("Erreur dans le calcule de l'orientation." +
+				" tondeuse : "+ idTondeuse+ " , orientation : "+degreeCalcule);
 	}
 
 	/**
@@ -184,16 +213,13 @@ public class Tondeuse {
 	}
 	
 	/**
-	 * Permet de récupérer les positions des autres tondeuses. Ajouter les
-	 * positions comme des obstacles
-	 * 
-	 * @param position
+	 * Permet de récupérer les positions des autres tondeuses. 
+	 * Ajouter les positions comme des obstacles
+	 * @param positionObstacle
 	 *            position
 	 */
-	public void recevoirPosition(Position position) {
-		this.listeObstacle.add(position);
-		System.out.println("Position nouveau obstacle: " + position.toString()
-				+ " this " + this);
+	public void recevoirPosition(Position positionObstacle) {
+		this.listeObstacle.add(positionObstacle);
 	}
 
 	/**
@@ -203,13 +229,13 @@ public class Tondeuse {
 	 */
 	public String informationTondeuse() {
 		StringBuilder sb = new StringBuilder();
+		sb.append("idTondeuse : " + idTondeuse);
+		sb.append("\n");
 		sb.append("Position x : " + position.getX());
 		sb.append("\n");
 		sb.append("Position y : " + position.getY());
 		sb.append("\n");
 		sb.append("Position orientation : " + orientation.getLabel());
-		sb.append("\n");
-		sb.append("this : " + this);
 		return sb.toString();
 	}
 

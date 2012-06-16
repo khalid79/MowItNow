@@ -1,15 +1,12 @@
 package fr.xebia.mowitnow.presentation;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.CharBuffer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
-
 import com.google.appengine.api.channel.ChannelService;
 import com.google.appengine.api.channel.ChannelServiceFactory;
-
+import com.google.gson.Gson;
 import fr.xebia.mowitnow.autres.IConstantes;
 
 /**
@@ -28,19 +25,19 @@ public class InitialisationServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-
+		// récupérer le pseudo de l'utilisateur
+		String pseudo = req.getParameter("pseudo");
+		// récupérer la session, créer une nouvelle si elle n'existe pas.
+        HttpSession session = req.getSession(true);
+        session.setAttribute(IConstantes.PSEUDO, pseudo);
+		// récupérer une instance du channelService
 		ChannelService channelService = ChannelServiceFactory.getChannelService();
-
-		String token = channelService.createChannel(IConstantes.CLIENT_ID);
-
-		FileReader reader = new FileReader("html/accueil.html");
-		CharBuffer buffer = CharBuffer.allocate(16384);
-		reader.read(buffer);
-		String index = new String(buffer.array());
-		index = index.replaceAll("\\{\\{ token \\}\\}", token);
-
-		resp.setContentType("text/html; charset=iso-8859-1");
-		resp.getWriter().write(index);
+		// créer le token à partir du pseudo envoyer par l'ihm
+		String token = channelService.createChannel(pseudo);
+		// envoyer le token généré dans la réponse
+		Gson gson = new Gson();
+		resp.setContentType("text/json");
+		resp.getWriter().write(gson.toJson(token));
 	}
 	
 	/**

@@ -1,91 +1,74 @@
 package fr.xebia.mowitnow.domaine;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.internal.runners.statements.Fail;
+
+import fr.xebia.mowitnow.autres.TondeuseException;
 
 
+/**
+ * Classe de test de la tondeuse.
+ * @author KBOUAABD
+ *
+ */
 public class TondeuseTest {
 	
-	@Before
-    public void setUp() {
-    }
+	/**
+	 * Permet de simuler un observer.
+	 * @author KBOUAABD
+	 *
+	 */
+	private class ObserverTest implements Observer{
+		/** 
+		 * mediator.
+		 */
+		public TondeuseMediator mediator;
+		
+		@Override
+		public void update(Observable observable, Object message) {
+			 mediator = (TondeuseMediator) observable;
+		}
+		
+	}
 	
 	/**
+	 * Simulation de la position des tondeuses.
 	 * @throws Exception 
-	 * 
 	 */
 	@Test
-	public void simulationTest0() throws Exception{
-//		TondeuseMediator tondeuseMediator = new TondeuseMediator();
-//		tondeuseMediator.construireInstructions("5 5\n" + "1 2 N\n" + "GAGAGAGAA\n" + "3 3 E\n" + "AADAADADDAGAAAGAAGADAA");
-	}
-	
-	
-	/**
-	 * 
-	 */
-	@Test
-	public void simulationTest1(){
-		Tondeuse tondeuse = new Tondeuse(5,5,new Position(1, 2),Orientation.N, new TondeuseMediator(), "test1");
-		List<Direction> list = new ArrayList<Direction>();
-		list.add(Direction.G);
-		list.add(Direction.A);
-		list.add(Direction.G);
-		list.add(Direction.A);
-		list.add(Direction.G);
-		list.add(Direction.A);
-		list.add(Direction.G);
-		list.add(Direction.A);
-		list.add(Direction.A);
-		
-		tondeuse.setListeInstructions(list);
-		try {
-			tondeuse.demarrer();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public void simulationTondeuses() throws Exception{
+		ObserverTest observerTest = new ObserverTest();
+		TondeuseFactory.initialisationTondeuses("5 5\n1 2 N\nGAGAGAGAA\n3 3 E\nAADAADADDA", "pseudo", observerTest);
+		// pour être sur que l'exécution des instructions est finie
+		Thread.sleep(3000);
+		List<Tondeuse> listeTondeuses = observerTest.mediator.getListeTondeuses();
+		for (Tondeuse tondeuse : listeTondeuses) {
+			// première tondeuse
+			Position dernierePosition = tondeuse.getPosition();
+			if(tondeuse.getIdTondeuse().equals("1")){
+				Assert.assertEquals(dernierePosition.getX(), 1);
+				Assert.assertEquals(dernierePosition.getY(), 3);
+			}else if(tondeuse.getIdTondeuse().equals("2")){
+				Assert.assertEquals(dernierePosition.getX(), 5);
+				Assert.assertEquals(dernierePosition.getY(), 1);
+			}
 		}
-		
-		//System.out.println(tondeuse.information());
-		Assert.assertEquals(tondeuse.getPosition().getX(), 1);
-		Assert.assertEquals(tondeuse.getPosition().getY(), 3);
-		Assert.assertEquals(tondeuse.getOrientation(), Orientation.N);
 	}
 	
 	/**
-	 * 
+	 * Permet de tester le calcule de l'orientation à partir de la direction.
+	 * @throws TondeuseException 
 	 */
 	@Test
-	public void simulationTest2(){
-		Tondeuse tondeuse = new Tondeuse(5,5,new Position(3, 3),Orientation.E,new TondeuseMediator(),"test2");
-		List<Direction> list = new ArrayList<Direction>();
-		list.add(Direction.A);
-		list.add(Direction.A);
-		list.add(Direction.D);
-		list.add(Direction.A);
-		list.add(Direction.A);
-		list.add(Direction.D);
-		list.add(Direction.A);
-		list.add(Direction.D);
-		list.add(Direction.D);
-		list.add(Direction.A);
-		tondeuse.setListeInstructions(list);
-		try {
-			tondeuse.demarrer();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		System.out.println(tondeuse.informationTondeuse());
-		Assert.assertEquals(tondeuse.getPosition().getX(), 5);
-		Assert.assertEquals(tondeuse.getPosition().getY(), 1);
-		Assert.assertEquals(tondeuse.getOrientation(), Orientation.E);
+	public void construirePelouseTestSuccess() throws TondeuseException{
+		Tondeuse tondeuseTest = new Tondeuse(Orientation.N);
+		Orientation orientation =  tondeuseTest.calculeOrientation(-90);
+		Assert.assertEquals(orientation, Orientation.W);
 	}
-
 }

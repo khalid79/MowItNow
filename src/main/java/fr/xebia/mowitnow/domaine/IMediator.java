@@ -13,5 +13,11 @@ public interface IMediator {
 	 * Permet de notifier la position d'une tondeuse.
 	 * @param tondeuse la tondeuse en question
 	 */
-	public void notifierPosition(Tondeuse tondeuse);	
+	public void notifierPosition(Tondeuse tondeuse);
+	
+	/**
+	 * Permet un obstacle : la dernière position d'une tondeuse.
+	 * @param tondeuse la tondeuse en question
+	 */
+	public void notifierObstacle(Tondeuse tondeuse);	
 }

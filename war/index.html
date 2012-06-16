@@ -1,21 +1,95 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
-
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="init">init</a></td>
-      </tr>
-    </table>
-  </body>
+	<head>
+	<title>MowITNOW</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link href="style/bootstrap.css" rel="stylesheet">
+		<link href="http://fonts.googleapis.com/css?family=Sirin+Stencil" rel="stylesheet" type="text/css">
+		<style type="text/css">
+			body {
+				padding-top: 100px;
+				padding-bottom: 40px;
+			}
+			.titre {
+				font-family: 'Sirin Stencil', cursive;
+				font-weight: normal;
+				font-size: 2.5em;
+				color: hsl(42, 84%, 52%);
+			}
+			.grilleContainer{
+				position: relative;
+			}
+			#fenetreConnexion{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#"><span class="titre">MowItNow</span></a>
+					<div class="nav-collapse pull-right" style="margin-top: 20px;">
+						<p class="navbar-text pull-right">
+							<a href="#">Bonjour : <span id="pseudo" ></span></a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<input type="hidden" name="token" value="{{ token }}">
+			<div class="alert alert-info">
+				<strong>Bienvenue sur MowItNow! </strong>
+				Veuillez saisir les instructions pour démarrer le jeu.
+			</div>
+			<div id="zoneErreur"></div>
+			<div class="row">
+				<div class="span4">
+					<div class="control-group success">
+						<textarea class="input-xlarge span4" id="zoneInstruction" rows="16"></textarea>
+						<button name="envoyer" class="btn btn-success">Démarrer tondeuse(s)</button>
+					</div>
+				</div>
+				<div class="span4">
+					<div class="grilleContainer" ></div>
+				</div>
+			</div>
+			<hr>
+			<footer>
+				<p>&copy; MowItNow</p>
+			</footer>
+		</div>
+		<!-- Fenetre modale de connexion -->
+		<div id="fenetreConnexion" class="modal hide fade">
+			<div class="modal-header">
+				<h3>Présentez vous !</h3>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="connexionform" >
+					<div class="control-group">
+						<label class="control-label" for="appendedInputButton">Pseudo:</label>
+						<div class="controls">
+							<div class="input-append">
+								<input class="span2" id="pseudoInput" size="16" type="text">
+								<button id="envoyerPseudo" class="btn btn-primary" type="button">Go!</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- Pour afficher les erreurs avec moustache -->
+		<script id="erreur" type="text/html">
+		<div class="alert fade in">
+            <button class="close" data-dismiss="alert">×</button>
+            <strong>Attention! </strong> {{messageErreur}}
+		</div>
+	</script>
+		<script src="/_ah/channel/jsapi"></script>
+		<script src="javascript/jquery-1.7.1.js" type="text/javascript"></script>
+		<script src="javascript/mowItNow.js" type="text/javascript"  charset="ISO-8859-1"></script>
+		<script src="javascript/bootstrap.min.js" type="text/javascript"></script>
+		<script src="javascript/mustache.js" type="text/javascript"></script>
+	</body>
 </html>

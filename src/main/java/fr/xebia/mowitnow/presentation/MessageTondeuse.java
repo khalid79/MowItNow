@@ -1,6 +1,5 @@
 package fr.xebia.mowitnow.presentation;
 
-import fr.xebia.mowitnow.domaine.Orientation;
 import fr.xebia.mowitnow.domaine.Position;
 
 /**
@@ -20,7 +19,6 @@ public class MessageTondeuse {
 	 */
 	private Position position;
 	
-	
 	/**
 	 * degre.
 	 */
@@ -36,7 +34,7 @@ public class MessageTondeuse {
 	 * Constructeur.
 	 * @param idTondeuse idTondeuse
 	 * @param position position
-	 * @param orientation orientation
+	 * @param degre degre
 	 */
 	public MessageTondeuse(String idTondeuse, Position position, int degre) {
 		super();
@@ -44,7 +42,6 @@ public class MessageTondeuse {
 		this.position = position;
 		this.degre = degre;
 	}
-
 
 	/**
 	 * @return the idTondeuse
@@ -87,7 +84,5 @@ public class MessageTondeuse {
 	public void setDegre(int degre) {
 		this.degre = degre;
 	}
-
-
 	
 }
