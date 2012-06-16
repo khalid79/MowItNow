@@ -1,4 +1,5 @@
-# MowItNow : http://mowitnow-game.appspot.com
+# MowItNow 
+http://mowitnow-game.appspot.com
 
 ## Stack technique
 
@@ -14,7 +15,7 @@
 
 ## Exemple de commandes :
 
-5 5
-1 2 N
-GAGAGAGAA
-AADAADADDA
+* 5 5
+* 1 2 N
+* GAGAGAGAA
+* AADAADADDA
